@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-// Function prototypes
+// ソートアルゴリズムの関数プロトタイプ宣言
 void bubbleSort(int arr[], int n);
 void selectionSort(int arr[], int n);
 void quickSort(int arr[], int low, int high);
@@ -10,46 +10,48 @@ void printArray(int arr[], int n);
 
 int main() {
     int n, choice;
-    printf("Enter number of elements: ");
+    printf("要素数を入力してください: ");
     scanf("%d", &n);
-    int *arr = (int*)malloc(n * sizeof(int));
+    int *arr = (int*)malloc(n * sizeof(int)); // 動的配列の確保
 
-    printf("Enter the elements:\n");
+    printf("要素を入力してください:\n");
     for(int i = 0; i < n; i++) {
         scanf("%d", &arr[i]);
     }
 
-    printf("\nChoose a sorting algorithm:\n");
-    printf("1. Bubble Sort\n2. Selection Sort\n3. Quick Sort\n");
-    printf("Enter your choice: ");
+    printf("\n使用するソートアルゴリズムを選択してください:\n");
+    printf("1. バブルソート\n2. 選択ソート\n3. クイックソート\n");
+    printf("番号を入力: ");
     scanf("%d", &choice);
 
+    // 選択されたソートアルゴリズムを実行
     switch(choice) {
         case 1:
             bubbleSort(arr, n);
-            printf("Sorted array using Bubble Sort:\n");
+            printf("バブルソートで整列しました:\n");
             break;
         case 2:
             selectionSort(arr, n);
-            printf("Sorted array using Selection Sort:\n");
+            printf("選択ソートで整列しました:\n");
             break;
         case 3:
             quickSort(arr, 0, n-1);
-            printf("Sorted array using Quick Sort:\n");
+            printf("クイックソートで整列しました:\n");
             break;
         default:
-            printf("Invalid choice.\n");
-            free(arr);
+            printf("無効な選択です。\n");
+            free(arr); // メモリ解放
             return 1;
     }
 
-    printArray(arr, n);
-    free(arr);
+    printArray(arr, n); // 結果を表示
+    free(arr); // メモリ解放
     return 0;
 }
 
-// Bubble Sort
+// バブルソート
 void bubbleSort(int arr[], int n) {
+    // 配列の末尾に向かって隣接要素を比較し、順番が逆なら交換
     for(int i = 0; i < n-1; i++) {
         for(int j = 0; j < n-i-1; j++) {
             if(arr[j] > arr[j+1]) {
@@ -61,8 +63,9 @@ void bubbleSort(int arr[], int n) {
     }
 }
 
-// Selection Sort
+// 選択ソート
 void selectionSort(int arr[], int n) {
+    // 未整列部分から最小値を見つけ出し、先頭と交換
     for(int i = 0; i < n-1; i++) {
         int minIdx = i;
         for(int j = i+1; j < n; j++) {
@@ -76,16 +79,18 @@ void selectionSort(int arr[], int n) {
     }
 }
 
-// Quick Sort
+// クイックソート
 void quickSort(int arr[], int low, int high) {
     if(low < high) {
-        int pi = partition(arr, low, high);
-        quickSort(arr, low, pi-1);
-        quickSort(arr, pi+1, high);
+        int pi = partition(arr, low, high); // ピボットのインデックス
+        quickSort(arr, low, pi-1);  // ピボットより左側を再帰的にソート
+        quickSort(arr, pi+1, high); // ピボットより右側を再帰的にソート
     }
 }
+
+// 配列を分割し、ピボットの位置を返す関数
 int partition(int arr[], int low, int high) {
-    int pivot = arr[high];
+    int pivot = arr[high]; // 配列の最後の要素をピボットとする
     int i = low-1;
     for(int j = low; j < high; j++) {
         if(arr[j] < pivot) {
@@ -101,7 +106,7 @@ int partition(int arr[], int low, int high) {
     return i+1;
 }
 
-// Print array
+// 配列を表示する関数
 void printArray(int arr[], int n) {
     for(int i = 0; i < n; i++) {
         printf("%d ", arr[i]);
